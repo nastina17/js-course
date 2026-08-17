@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test('Verify login with valid credentials', async ({ page }) => {
-  await page.goto('https://practicesoftwaretesting.com/auth/login');
+  await page.goto('/auth/login');
 
   await page.getByLabel('Email').fill('customer@practicesoftwaretesting.com');
   await page.getByTestId('password').fill('welcome01');
