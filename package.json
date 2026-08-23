@@ -4,14 +4,21 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test:unit10": "playwright test tests/unit10.spec.ts"
+    "test:unit10": "playwright test tests/unit10.spec.ts",
+    "lint": "npx eslint . --fix",
+    "test:unit11": "playwright test tests/unit11.spec.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.62.1",
-    "@types/node": "^26.2.0"
+    "@types/node": "^26.2.0",
+    "eslint": "^10.9.0",
+    "eslint-plugin-playwright": "^2.11.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.67.0"
   }
 }
