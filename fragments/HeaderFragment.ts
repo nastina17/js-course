@@ -7,6 +7,8 @@ export class HeaderFragment {
     contactButton: Locator;
     signInButton: Locator;
     languageButton: Locator;
+    cartButton: Locator;
+    cartQuantity: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -15,5 +17,7 @@ export class HeaderFragment {
         this.contactButton = this.page.getByRole('link', { name: 'Contact' });
         this.signInButton = this.page.getByRole('link', { name: 'Sign in' });
         this.languageButton = this.page.getByRole('button', { name: 'en' });
+        this.cartButton = page.getByTestId("nav-cart");
+        this.cartQuantity = page.getByTestId("cart-quantity");
     }
 }

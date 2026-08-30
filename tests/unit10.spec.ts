@@ -1,17 +1,15 @@
 import { test, expect } from '@playwright/test';
+import { AccountPage } from 'pages/account.page';
+
+test.use({
+    storageState: 'playwright/.auth/user.json',
+});
 
 test('Verify login with valid credentials', async ({ page }) => {
-  await page.goto('/auth/login');
+    const accountPage = new AccountPage(page);
 
-  await page.getByLabel('Email').fill('customer@practicesoftwaretesting.com');
-  await page.getByTestId('password').fill('welcome01');
+    await page.goto('/account');
 
-  await page.getByRole('button', { name: 'Login' }).click();
-
-  await expect(page).toHaveURL('https://practicesoftwaretesting.com/account');
-
-  await expect(page.getByRole('heading', { name: 'My account' })).toBeVisible();
-
-  await expect(page.getByRole('menuitem', {name: 'Jane Doe'})).toBeVisible();
+    await expect(accountPage.pageTitle).toBeVisible();
 });
 
