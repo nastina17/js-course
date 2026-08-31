@@ -1,8 +1,9 @@
 import { test, expect } from '@playwright/test';
 import { AccountPage } from 'pages/account.page';
+import { userAuthJsonPath } from 'auth-constants';
 
 test.use({
-    storageState: 'playwright/.auth/user.json',
+    storageState: userAuthJsonPath,
 });
 
 test('Verify login with valid credentials', async ({ page }) => {

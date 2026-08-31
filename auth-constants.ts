@@ -1,0 +1,1 @@
+export const userAuthJsonPath = 'playwright/.auth/user.json';

@@ -1,5 +1,8 @@
 import { Locator, Page } from '@playwright/test';
 import { HeaderFragment } from 'fragments/HeaderFragment';
+import { HandTools } from 'tests/testData/categories';
+import { PowerTools } from 'tests/testData/categories';
+import { Other } from 'tests/testData/categories';
 export class HomePage {
     page: Page;
     header: HeaderFragment;
@@ -31,7 +34,7 @@ export class HomePage {
         return prices.map(price => Number(price.replace('$', '')));
     }
 
-    async selectSubcategory(subcategory: string): Promise<void> {
+    async selectSubcategory(subcategory: HandTools | PowerTools | Other): Promise<void> {
         await this.page.getByLabel(subcategory).check();
     }
 }

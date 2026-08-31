@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { userAuthJsonPath } from 'auth-constants';
 
 test('authenticate user', async ({ page }) => {
     await page.goto('/auth/login');
@@ -11,6 +12,6 @@ test('authenticate user', async ({ page }) => {
     await expect(page).toHaveURL('https://practicesoftwaretesting.com/account');
 
     await page.context().storageState({
-        path: 'playwright/.auth/user.json',
+        path: userAuthJsonPath,
     });
 });
