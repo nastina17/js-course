@@ -8,6 +8,7 @@ export class ProductPage {
     productPrice: Locator;
     addToCartButton: Locator;
     addToFavoritesButton: Locator;
+    alertMessage: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -16,5 +17,6 @@ export class ProductPage {
         this.productPrice = this.page.getByTestId('unit-price');
         this.addToCartButton = this.page.getByTestId('add-to-cart')
         this.addToFavoritesButton = this.page.getByTestId('add-to-favorites');
+        this.alertMessage = page.getByRole("alert");
     }
 }

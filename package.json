@@ -6,7 +6,12 @@
   "scripts": {
     "test:unit10": "playwright test tests/unit10.spec.ts",
     "lint": "npx eslint . --fix",
-    "test:unit11": "playwright test tests/unit11.spec.ts"
+    "test:unit11": "playwright test tests/unit11.spec.ts",
+    "test:login": "playwright test tests/auth.login.spec.ts",
+    "test:cart": "playwright test tests/unit12.cart.spec.ts",
+    "test:sort.name": "playwright test tests/unit12.sorting.name.spec.ts",
+    "test:sort.price": "playwright test tests/unit12.sorting.price.spec.ts",
+    "test:filter": "playwright test tests/unit12.filtering.spec.ts"
   },
   "keywords": [],
   "author": "",
