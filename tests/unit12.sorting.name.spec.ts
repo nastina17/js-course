@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { HomePage } from 'pages/home.page';
+import { test } from "../fixtures/fixtures";
+import { expect } from "@playwright/test";
 
 const sortOptions = [
     {
@@ -13,15 +13,14 @@ const sortOptions = [
 ];
 
 for (const option of sortOptions) {
-    test(`Verify user can perform sorting by ${option.name}`, async ({ page }) => {
-        const homePage = new HomePage(page);
+    test(`Verify user can perform sorting by ${option.name}`, async ({ page, app }) => {
 
         await page.goto('/');
 
-        await homePage.sortDropdown.selectOption({ label: option.name });
+        await app.homePage.sortDropdown.selectOption({ label: option.name });
 
         await expect(async () => {
-            const actualNames = await homePage.getProductNames();
+            const actualNames = await app.homePage.getProductNames();
 
             const expectedNames = [...actualNames];
 
