@@ -11,7 +11,8 @@
     "test:cart": "playwright test tests/unit12.cart.spec.ts",
     "test:sort.name": "playwright test tests/unit12.sorting.name.spec.ts",
     "test:sort.price": "playwright test tests/unit12.sorting.price.spec.ts",
-    "test:filter": "playwright test tests/unit12.filtering.spec.ts"
+    "test:filter": "playwright test tests/unit12.filtering.spec.ts",
+    "test:checkout": "playwright test tests/unit13.checkout.spec.ts"
   },
   "keywords": [],
   "author": "",
