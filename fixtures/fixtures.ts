@@ -1,9 +1,15 @@
 import { test as base, expect } from "@playwright/test";
 import { App } from "../pages/app";
+import { apiBaseURL } from "../auth-constants";
+import { userData } from "../tests/testData/credentials";
 
 type Fixtures = {
     app: App;
     loggedInApp: App;
+};
+
+type LoginResponse = {
+    access_token: string;
 };
 
 export const test = base.extend<Fixtures>({
@@ -13,15 +19,26 @@ export const test = base.extend<Fixtures>({
         await use(app);
     },
 
-    loggedInApp: async ({ app }, use) => {
-        await app.page.goto('/auth/login');
+    loggedInApp: async ({ app, request }, use) => {
+        const resp = await request.post(`${apiBaseURL}/users/login`, {
+            data: {
+                email: userData.email,
+                password: userData.password,
+            },
+        });
 
-        await app.loginPage.login(
-            "customer@practicesoftwaretesting.com",
-            "welcome01",
-        );
+        await expect(resp).toBeOK();
 
-        await expect(app.page).not.toHaveURL(/\/auth\/login/);
+        const jsonData = await resp.json() as LoginResponse;
+        const token = jsonData.access_token;
+
+        await app.page.goto("/");
+
+        await app.page.evaluate((token) => {
+            localStorage.setItem("auth-token", token);
+        }, token);
+
+        await app.page.reload();
 
         await use(app);
     },
