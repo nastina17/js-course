@@ -5,9 +5,6 @@ import 'dotenv/config';
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-// import dotenv from 'dotenv';
-// import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -23,12 +20,18 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  reporter: [
+    ['html'],
+    ['dot'],
+    ['json', { outputFile: 'test-results/results.json' }],
+],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
-   use: {
+  use: {
     baseURL: process.env.BASE_URL,
     testIdAttribute: 'data-test',
+    screenshot: 'only-on-failure',
     trace: 'on-first-retry',
+    video: 'on-first-retry',
   },
 
   /* Configure projects for major browsers */
