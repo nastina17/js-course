@@ -13,7 +13,9 @@ const sortPriceOptions = [
 ];
 
 for (const option of sortPriceOptions) {
-    test(`Verify user can perform sorting by ${option.name}`, async ({ page, app }) => {
+    test(`Verify user can perform sorting by ${option.name}`, {
+        tag: "@regression",
+    }, async ({ page, app }) => {
 
         await page.goto('/');
 

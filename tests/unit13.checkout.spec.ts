@@ -1,7 +1,9 @@
 import { test } from "../fixtures/fixtures";
 import { expect } from "@playwright/test";
 
-test("Verify logged in user can buy a product", async ({ page, loggedInApp }) => {
+test("Verify logged in user can buy a product", {
+    tag: ["@smoke", "@regression"],
+}, async ({ page, loggedInApp }) => {
     await page.goto('/');
 
     await loggedInApp.homePage.products.first().click();

@@ -1,7 +1,9 @@
 import { test } from '../fixtures/fixtures';
 import { expect } from '@playwright/test';
 
-test('Verify user can view product details', async ({ page, app }) => {
+test('Verify user can view product details', {
+    tag: ['@smoke', '@regression'],
+}, async ({ page, app }) => {
     const productName = 'Combination Pliers';
 
     await page.goto('/');

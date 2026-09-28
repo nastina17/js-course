@@ -4,7 +4,9 @@ import { expect } from "@playwright/test";
 const PRODUCT_NAME = "Slip Joint Pliers";
 const PRODUCT_PRICE = "9.17";
 
-test("Verify user can add product to cart", async ({ page, app }) => {
+test("Verify user can add product to cart", {
+    tag: ["@smoke", "@regression"],
+}, async ({ page, app }) => {
     await page.goto('/');
 
     await app.homePage.selectProduct(PRODUCT_NAME);

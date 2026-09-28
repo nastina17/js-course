@@ -2,7 +2,9 @@ import { test } from "../fixtures/fixtures";
 import { expect } from "@playwright/test";
 import { apiBaseURL } from "../auth-constants";
 
-test("Verify 20 products are displayed", async ({ page, app }) => {
+test("Verify 20 products are displayed", {
+    tag: "@regression",
+}, async ({ page, app }) => {
     await page.route(`${apiBaseURL}/products*`, async (route) => {
         const products = Array.from({ length: 20 }, (_, index) => ({
             id: index + 1,

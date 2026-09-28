@@ -1,16 +1,25 @@
 import { test, expect } from '@playwright/test';
-import { AccountPage } from 'pages/account.page';
-import { userAuthJsonPath } from 'auth-constants';
+import { userAuthJsonPath } from '../auth-constants';
 
-test.use({
-    storageState: userAuthJsonPath,
-});
+test('Authenticate user', async ({ page }) => {
+    await page.goto('/auth/login');
 
-test('Verify login with valid credentials', async ({ page }) => {
-    const accountPage = new AccountPage(page);
+    await page
+        .getByLabel('Email')
+        .fill(process.env.USER_EMAIL!);
 
-    await page.goto('/account');
+    await page
+        .getByTestId('password')
+        .fill(process.env.USER_PASSWORD!);
 
-    await expect(accountPage.pageTitle).toBeVisible();
+    await page
+        .getByRole('button', { name: 'Login' })
+        .click();
+
+    await expect(page).toHaveURL('/account');
+
+    await page.context().storageState({
+        path: userAuthJsonPath,
+    });
 });
 
