@@ -13,11 +13,11 @@ export default defineConfig({
 
   workers: process.env.CI ? 1 : undefined,
 
-reporter: [
-  ['html'],
-  ['dot'],
-  ['json', { outputFile: 'test-results/results.json' }],
-],
+  reporter: [
+    ['html'],
+    ['dot'],
+    ['json', { outputFile: 'test-results/results.json' }],
+  ],
 
   use: {
     baseURL: process.env.BASE_URL,
@@ -37,6 +37,7 @@ reporter: [
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
+        viewport: { width: 1280, height: 720 },
         storageState: userAuthJsonPath,
       },
       dependencies: ['auth'],
@@ -46,6 +47,7 @@ reporter: [
       name: 'firefox',
       use: {
         ...devices['Desktop Firefox'],
+        viewport: { width: 1280, height: 720 },
         storageState: userAuthJsonPath,
       },
       dependencies: ['auth'],
@@ -55,6 +57,7 @@ reporter: [
       name: 'webkit',
       use: {
         ...devices['Desktop Safari'],
+        viewport: { width: 1280, height: 720 },
         storageState: userAuthJsonPath,
       },
       dependencies: ['auth'],
