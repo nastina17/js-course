@@ -13,11 +13,11 @@ export default defineConfig({
 
   workers: process.env.CI ? 1 : undefined,
 
-  reporter: [
-    ['html'],
-    ['dot'],
-    ['json', { outputFile: 'test-results/results.json' }],
-  ],
+reporter: [
+  ['html'],
+  ['list'],
+  ['json', { outputFile: 'test-results/results.json' }],
+],
 
   use: {
     baseURL: process.env.BASE_URL,
