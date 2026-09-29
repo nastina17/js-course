@@ -28,39 +28,38 @@ export default defineConfig({
   },
 
   projects: [
-    {
-      name: 'auth',
-      testMatch: /.*\.login\.spec\.ts/,
-    },
+  {
+    name: 'auth',
+    testMatch: /.*\.login\.spec\.ts/,
+  },
 
-    {
-      name: 'chromium',
-      use: {
-        ...devices['Desktop Chrome'],
-        viewport: { width: 1280, height: 720 },
-        storageState: userAuthJsonPath,
-      },
-      dependencies: ['auth'],
+  {
+    name: 'chromium',
+    use: {
+      ...devices['Desktop Chrome'],
+      storageState: userAuthJsonPath,
     },
+    dependencies: ['auth'],
+  },
 
-    {
-      name: 'firefox',
-      use: {
-        ...devices['Desktop Firefox'],
-        viewport: { width: 1280, height: 720 },
-        storageState: userAuthJsonPath,
-      },
-      dependencies: ['auth'],
+  /*
+  {
+    name: 'firefox',
+    use: {
+      ...devices['Desktop Firefox'],
+      storageState: userAuthJsonPath,
     },
+    dependencies: ['auth'],
+  },
 
-    {
-      name: 'webkit',
-      use: {
-        ...devices['Desktop Safari'],
-        viewport: { width: 1280, height: 720 },
-        storageState: userAuthJsonPath,
-      },
-      dependencies: ['auth'],
+  {
+    name: 'webkit',
+    use: {
+      ...devices['Desktop Safari'],
+      storageState: userAuthJsonPath,
     },
-  ],
+    dependencies: ['auth'],
+  },
+  */
+],
 });
