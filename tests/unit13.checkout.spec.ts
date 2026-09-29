@@ -3,7 +3,7 @@ import { expect } from "@playwright/test";
 
 test("Verify logged in user can buy a product", {
     tag: ["@smoke", "@regression"],
-}, async ({ page, loggedInApp }) => {
+}, async ({ page, app }) => {
 
     let productName: string;
     let productPrice: string;
@@ -13,58 +13,60 @@ test("Verify logged in user can buy a product", {
     });
 
     await test.step("Select a product", async () => {
-        await loggedInApp.homePage.products.first().click();
+        await app.homePage.products.first().click();
 
-        await expect(loggedInApp.page).toHaveURL(/product/);
+        await expect(page).toHaveURL(/product/);
 
-        productName = await loggedInApp.productPage.productName.innerText();
-        productPrice = await loggedInApp.productPage.productPrice.innerText();
+        productName = await app.productPage.productName.innerText();
+        productPrice = await app.productPage.productPrice.innerText();
     });
 
     await test.step("Add product to cart", async () => {
-        await loggedInApp.productPage.addToCartButton.click();
+        await app.productPage.addToCartButton.click();
 
-        await loggedInApp.productPage.header.cartButton.click();
+        await app.productPage.header.cartButton.click();
 
-        await expect(loggedInApp.page).toHaveURL(/checkout/);
+        await expect(page).toHaveURL(/checkout/);
     });
 
     await test.step("Verify product in cart", async () => {
-        await expect(loggedInApp.cartPage.cartProducts).toHaveCount(1);
-        await expect(loggedInApp.cartPage.productTitle).toHaveText(productName);
-        await expect(loggedInApp.cartPage.productPrice).toHaveText(`$${productPrice}`);
-        await expect(loggedInApp.cartPage.totalPrice).toHaveText(`$${productPrice}`);
+        await expect(app.cartPage.cartProducts).toHaveCount(1);
+        await expect(app.cartPage.productTitle).toHaveText(productName);
+        await expect(app.cartPage.productPrice).toHaveText(`$${productPrice}`);
+        await expect(app.cartPage.totalPrice).toHaveText(`$${productPrice}`);
 
-        await loggedInApp.cartPage.proceedToCheckoutButton.click();
+        await app.cartPage.proceedToCheckoutButton.click();
     });
 
     await test.step("Verify logged in user", async () => {
-        await expect(loggedInApp.checkoutPage.loggedInUserInfo)
+        await expect(app.checkoutPage.loggedInUserInfo)
             .toContainText('Jane Doe');
 
-        await loggedInApp.checkoutPage.proceedSignin.click();
+        await app.checkoutPage.proceedSignin.click();
     });
 
     await test.step("Fill billing address", async () => {
-        await loggedInApp.checkoutPage.country.selectOption({
+        await app.checkoutPage.country.selectOption({
             label: 'Ukraine'
         });
-        await loggedInApp.checkoutPage.postalCode.fill('48260');
-        await loggedInApp.checkoutPage.houseNumber.fill('20');
 
-        await loggedInApp.checkoutPage.proceedBilling.click();
+        await app.checkoutPage.postalCode.fill('48260');
+        await app.checkoutPage.houseNumber.fill('20');
+
+        await app.checkoutPage.proceedBilling.click();
     });
 
     await test.step("Fill payment details and confirm order", async () => {
-        await loggedInApp.checkoutPage.paymentMethod.selectOption({
+        await app.checkoutPage.paymentMethod.selectOption({
             label: 'Credit Card'
         });
 
-        await loggedInApp.checkoutPage.cardNumber.fill(
+        await app.checkoutPage.cardNumber.fill(
             '1111-1111-1111-1111'
         );
-        await loggedInApp.checkoutPage.cvv.fill('111');
-        await loggedInApp.checkoutPage.cardHolder.fill('Jane Doe');
+
+        await app.checkoutPage.cvv.fill('111');
+        await app.checkoutPage.cardHolder.fill('Jane Doe');
 
         const expirationDate = new Date();
         expirationDate.setMonth(expirationDate.getMonth() + 3);
@@ -75,14 +77,14 @@ test("Verify logged in user can buy a product", {
 
         const year = String(expirationDate.getFullYear());
 
-        await loggedInApp.checkoutPage.expirationDate.fill(
+        await app.checkoutPage.expirationDate.fill(
             `${month}/${year}`
         );
 
-        await loggedInApp.checkoutPage.confirmButton.click();
+        await app.checkoutPage.confirmButton.click();
 
         await expect(
-            loggedInApp.checkoutPage.paymentSuccessMessage
+            app.checkoutPage.paymentSuccessMessage
         ).toBeVisible();
     });
 });

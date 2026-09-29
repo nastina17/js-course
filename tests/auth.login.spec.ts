@@ -1,20 +1,17 @@
 import { test, expect } from '@playwright/test';
-import { userAuthJsonPath } from 'auth-constants';
+import { apiBaseURL, userAuthJsonPath } from 'auth-constants';
 
 type LoginResponse = {
     access_token: string;
 };
 
 test('Authenticate user', async ({ page, request }) => {
-    const response = await request.post(
-        'https://api.practicesoftwaretesting.com/users/login',
-        {
-            data: {
-                email: process.env.USER_EMAIL,
-                password: process.env.USER_PASSWORD,
-            },
-        }
-    );
+    const response = await request.post(`${apiBaseURL}/users/login`, {
+        data: {
+            email: process.env.USER_EMAIL,
+            password: process.env.USER_PASSWORD,
+        },
+    });
 
     await expect(response).toBeOK();
 
