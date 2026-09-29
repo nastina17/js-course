@@ -5,6 +5,9 @@ test('Authenticate user', async ({ page }) => {
 
     await test.step('Open login page', async () => {
         await page.goto('/auth/login');
+
+        console.log('CURRENT URL:', page.url());
+        console.log('PAGE TITLE:', await page.title());
     });
 
     await test.step('Login with valid credentials', async () => {
