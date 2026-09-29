@@ -1,5 +1,4 @@
 import { defineConfig, devices } from '@playwright/test';
-import { userAuthJsonPath } from './auth-constants';
 import 'dotenv/config';
 
 export default defineConfig({
@@ -28,38 +27,27 @@ export default defineConfig({
   },
 
   projects: [
-  {
-    name: 'auth',
-    testMatch: /.*\.login\.spec\.ts/,
-  },
-
-  {
-    name: 'chromium',
-    use: {
-      ...devices['Desktop Chrome'],
-      storageState: userAuthJsonPath,
+    {
+      name: 'chromium',
+      use: {
+        ...devices['Desktop Chrome'],
+      },
     },
-    dependencies: ['auth'],
-  },
 
-  /*
-  {
-    name: 'firefox',
-    use: {
-      ...devices['Desktop Firefox'],
-      storageState: userAuthJsonPath,
+    /*
+    {
+      name: 'firefox',
+      use: {
+        ...devices['Desktop Firefox'],
+      },
     },
-    dependencies: ['auth'],
-  },
 
-  {
-    name: 'webkit',
-    use: {
-      ...devices['Desktop Safari'],
-      storageState: userAuthJsonPath,
+    {
+      name: 'webkit',
+      use: {
+        ...devices['Desktop Safari'],
+      },
     },
-    dependencies: ['auth'],
-  },
-  */
-],
+    */
+  ],
 });

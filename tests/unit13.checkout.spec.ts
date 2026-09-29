@@ -3,7 +3,7 @@ import { expect } from "@playwright/test";
 
 test("Verify logged in user can buy a product", {
     tag: ["@smoke", "@regression"],
-}, async ({ page, app }) => {
+}, async ({ page, loggedInApp }) => {
 
     let productName: string;
     let productPrice: string;
@@ -13,60 +13,60 @@ test("Verify logged in user can buy a product", {
     });
 
     await test.step("Select a product", async () => {
-        await app.homePage.products.first().click();
+        await loggedInApp.homePage.products.first().click();
 
         await expect(page).toHaveURL(/product/);
 
-        productName = await app.productPage.productName.innerText();
-        productPrice = await app.productPage.productPrice.innerText();
+        productName = await loggedInApp.productPage.productName.innerText();
+        productPrice = await loggedInApp.productPage.productPrice.innerText();
     });
 
     await test.step("Add product to cart", async () => {
-        await app.productPage.addToCartButton.click();
+        await loggedInApp.productPage.addToCartButton.click();
 
-        await app.productPage.header.cartButton.click();
+        await loggedInApp.productPage.header.cartButton.click();
 
         await expect(page).toHaveURL(/checkout/);
     });
 
     await test.step("Verify product in cart", async () => {
-        await expect(app.cartPage.cartProducts).toHaveCount(1);
-        await expect(app.cartPage.productTitle).toHaveText(productName);
-        await expect(app.cartPage.productPrice).toHaveText(`$${productPrice}`);
-        await expect(app.cartPage.totalPrice).toHaveText(`$${productPrice}`);
+        await expect(loggedInApp.cartPage.cartProducts).toHaveCount(1);
+        await expect(loggedInApp.cartPage.productTitle).toHaveText(productName);
+        await expect(loggedInApp.cartPage.productPrice).toHaveText(`$${productPrice}`);
+        await expect(loggedInApp.cartPage.totalPrice).toHaveText(`$${productPrice}`);
 
-        await app.cartPage.proceedToCheckoutButton.click();
+        await loggedInApp.cartPage.proceedToCheckoutButton.click();
     });
 
     await test.step("Verify logged in user", async () => {
-        await expect(app.checkoutPage.loggedInUserInfo)
+        await expect(loggedInApp.checkoutPage.loggedInUserInfo)
             .toContainText('Jane Doe');
 
-        await app.checkoutPage.proceedSignin.click();
+        await loggedInApp.checkoutPage.proceedSignin.click();
     });
 
     await test.step("Fill billing address", async () => {
-        await app.checkoutPage.country.selectOption({
+        await loggedInApp.checkoutPage.country.selectOption({
             label: 'Ukraine'
         });
 
-        await app.checkoutPage.postalCode.fill('48260');
-        await app.checkoutPage.houseNumber.fill('20');
+        await loggedInApp.checkoutPage.postalCode.fill('48260');
+        await loggedInApp.checkoutPage.houseNumber.fill('20');
 
-        await app.checkoutPage.proceedBilling.click();
+        await loggedInApp.checkoutPage.proceedBilling.click();
     });
 
     await test.step("Fill payment details and confirm order", async () => {
-        await app.checkoutPage.paymentMethod.selectOption({
+        await loggedInApp.checkoutPage.paymentMethod.selectOption({
             label: 'Credit Card'
         });
 
-        await app.checkoutPage.cardNumber.fill(
+        await loggedInApp.checkoutPage.cardNumber.fill(
             '1111-1111-1111-1111'
         );
 
-        await app.checkoutPage.cvv.fill('111');
-        await app.checkoutPage.cardHolder.fill('Jane Doe');
+        await loggedInApp.checkoutPage.cvv.fill('111');
+        await loggedInApp.checkoutPage.cardHolder.fill('Jane Doe');
 
         const expirationDate = new Date();
         expirationDate.setMonth(expirationDate.getMonth() + 3);
@@ -77,14 +77,14 @@ test("Verify logged in user can buy a product", {
 
         const year = String(expirationDate.getFullYear());
 
-        await app.checkoutPage.expirationDate.fill(
+        await loggedInApp.checkoutPage.expirationDate.fill(
             `${month}/${year}`
         );
 
-        await app.checkoutPage.confirmButton.click();
+        await loggedInApp.checkoutPage.confirmButton.click();
 
         await expect(
-            app.checkoutPage.paymentSuccessMessage
+            loggedInApp.checkoutPage.paymentSuccessMessage
         ).toBeVisible();
     });
 });
