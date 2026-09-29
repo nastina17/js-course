@@ -1,27 +1,35 @@
 import { test, expect } from '@playwright/test';
 import { userAuthJsonPath } from 'auth-constants';
 
-test('Authenticate user', async ({ page }) => {
+type LoginResponse = {
+    access_token: string;
+};
 
-    await test.step('Open login page', async () => {
-        await page.goto('/auth/login');
+test('Authenticate user', async ({ page, request }) => {
+    const response = await request.post(
+        'https://api.practicesoftwaretesting.com/users/login',
+        {
+            data: {
+                email: process.env.USER_EMAIL,
+                password: process.env.USER_PASSWORD,
+            },
+        }
+    );
 
-        console.log('CURRENT URL:', page.url());
-        console.log('PAGE TITLE:', await page.title());
-    });
+    await expect(response).toBeOK();
 
-    await test.step('Login with valid credentials', async () => {
-        await page.getByLabel('Email').fill(process.env.USER_EMAIL!);
-        await page.getByTestId('password').fill(process.env.USER_PASSWORD!);
+    const responseBody = await response.json() as LoginResponse;
+    const accessToken = responseBody.access_token;
 
-        await page.getByRole('button', { name: 'Login' }).click();
+    await page.goto('/');
 
-        await expect(page).toHaveURL('/account');
-    });
+    await page.evaluate((token) => {
+        localStorage.setItem('auth-token', token);
+    }, accessToken);
 
-    await test.step('Save authentication state', async () => {
-        await page.context().storageState({
-            path: userAuthJsonPath,
-        });
+    await page.reload();
+
+    await page.context().storageState({
+        path: userAuthJsonPath,
     });
 });
