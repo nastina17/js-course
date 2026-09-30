@@ -1,15 +1,30 @@
 import { test, expect } from '@playwright/test';
-import { userAuthJsonPath } from 'auth-constants';
+import { apiBaseURL, userAuthJsonPath } from 'auth-constants';
 
-test('authenticate user', async ({ page }) => {
-    await page.goto('/auth/login');
+type LoginResponse = {
+    access_token: string;
+};
 
-  await page.getByLabel('Email').fill('customer@practicesoftwaretesting.com');
-  await page.getByTestId('password').fill('welcome01');
+test('Authenticate user', async ({ page, request }) => {
+    const response = await request.post(`${apiBaseURL}/users/login`, {
+        data: {
+            email: process.env.USER_EMAIL,
+            password: process.env.USER_PASSWORD,
+        },
+    });
 
-    await page.getByRole('button', { name: 'Login' }).click();
+    await expect(response).toBeOK();
 
-    await expect(page).toHaveURL('https://practicesoftwaretesting.com/account');
+    const responseBody = await response.json() as LoginResponse;
+    const accessToken = responseBody.access_token;
+
+    await page.goto('/');
+
+    await page.evaluate((token) => {
+        localStorage.setItem('auth-token', token);
+    }, accessToken);
+
+    await page.reload();
 
     await page.context().storageState({
         path: userAuthJsonPath,

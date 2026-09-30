@@ -13,20 +13,30 @@ const sortOptions = [
 ];
 
 for (const option of sortOptions) {
-    test(`Verify user can perform sorting by ${option.name}`, async ({ page, app }) => {
+    test(`Verify user can perform sorting by ${option.name}`, {
+        tag: "@regression",
+    }, async ({ page, app }) => {
 
-        await page.goto('/');
+        await test.step("Open home page", async () => {
+            await page.goto('/');
+        });
 
-        await app.homePage.sortDropdown.selectOption({ label: option.name });
+        await test.step(`Sort products by ${option.name}`, async () => {
+            await app.homePage.sortDropdown.selectOption({
+                label: option.name
+            });
+        });
 
-        await expect(async () => {
-            const actualNames = await app.homePage.getProductNames();
+        await test.step("Verify products are sorted correctly", async () => {
+            await expect(async () => {
+                const actualNames = await app.homePage.getProductNames();
 
-            const expectedNames = [...actualNames];
+                const expectedNames = [...actualNames];
 
-            option.sort(expectedNames);
+                option.sort(expectedNames);
 
-            expect(actualNames).toEqual(expectedNames);
-        }).toPass();
+                expect(actualNames).toEqual(expectedNames);
+            }).toPass();
+        });
     });
 }

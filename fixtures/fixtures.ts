@@ -1,7 +1,6 @@
 import { test as base, expect } from "@playwright/test";
 import { App } from "../pages/app";
 import { apiBaseURL } from "../auth-constants";
-import { userData } from "../tests/testData/credentials";
 
 type Fixtures = {
     app: App;
@@ -19,26 +18,23 @@ export const test = base.extend<Fixtures>({
         await use(app);
     },
 
-    loggedInApp: async ({ app, request }, use) => {
-        const resp = await request.post(`${apiBaseURL}/users/login`, {
+    loggedInApp: async ({ page, request }, use) => {
+        const response = await request.post(`${apiBaseURL}/users/login`, {
             data: {
-                email: userData.email,
-                password: userData.password,
+                email: process.env.USER_EMAIL!,
+                password: process.env.USER_PASSWORD!,
             },
         });
 
-        await expect(resp).toBeOK();
+        await expect(response).toBeOK();
 
-        const jsonData = await resp.json() as LoginResponse;
-        const token = jsonData.access_token;
+        const responseBody = (await response.json()) as LoginResponse;
 
-        await app.page.goto("/");
-
-        await app.page.evaluate((token) => {
+        await page.addInitScript((token) => {
             localStorage.setItem("auth-token", token);
-        }, token);
+        }, responseBody.access_token);
 
-        await app.page.reload();
+        const app = new App(page);
 
         await use(app);
     },
